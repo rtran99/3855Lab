@@ -1,0 +1,9 @@
+version: 1
+datastore:
+  filename: data.json
+scheduler:
+  period_sec: 5
+searchitem:
+  url: http://localhost:8090/inventory/searchitem
+shiporders:
+  url: http://localhost:8090/fullfillment/shiporders

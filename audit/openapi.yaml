@@ -1,0 +1,203 @@
+openapi: 3.0.0
+info:
+  description: This API provides audit info
+  version: "1.0.0"
+  title: Simple Inventory API
+  contact:
+    email: rtran21@my.bcit.ca
+
+tags:
+  - name: scanner
+    description: records and scans the package being shipped
+paths:
+  /inventory/searchitem:
+    post:
+      tags:
+        - fullfillment
+      summary: searches inventory
+      operationId: app.get_search_Inventory
+      description: 
+          Searches the inventory for the package
+      responses:
+        '201':
+          description: package marked
+        '400':
+          description: 'invalid input, package invalid'
+        '409':
+          description: package has been cancelled
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+        description: Inventory item to add
+
+  /fullfillment/shiporders:
+    post:
+      tags:
+        - staff
+      summary: track packages that need to be shipped and packages that are cancelled
+      operationId: app.get_place_Shipment
+      description: marks package for shipment
+      responses:
+        '201':
+          description: package marked
+        '400':
+          description: 'invalid input, package invalid'
+        '409':
+          description: package has been cancelled
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/shipping'
+        description: Inventory item to add
+
+
+paths:
+  /event1:
+    get:
+      summary: gets a blood pressure reading from history
+      operationId: app.get_motion
+      description: Gets blood pressure readings from the event store
+      parameters:
+        - name: index
+          in: query
+          description: Gets the BP at the index in the event store
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: Successfully returned a blood pressure event
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/InventoryItem'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+             schema:
+              type: object
+              properties:
+                message:
+                  type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /event2:
+    get:
+      summary: gets a heart rate reading from history
+      operationId: app.get_door_motion
+      description: Gets heart rate reading from the event store
+      parameters:
+        - name: index
+          in: query
+          description: Gets the HR at the index in the event store
+          schema:
+            type: integer
+            example: 100
+      responses:
+        '200':
+          description: Successfully returned a heart rate event
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/shipping'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Not Found
+
+
+
+
+
+
+
+        
+components:
+  schemas:
+    InventoryItem:
+      type: object
+      required:
+        - device_id
+        - trackingId
+        - Itemname
+        - manufacturer
+        - quantity
+        - weight
+        - wishlisted
+      properties:
+        device_id:
+          type: string
+          example: A1B2C3D4
+        trackingId:
+          type: string
+          format: uuid
+          example: 1Z9999999999999999
+        Itemname:
+          type: string
+          example: 'Fan'
+        manufacturer:
+          type: string
+          example: 'Honeywell'
+        quantity:
+          type: integer
+          example: 10
+        weight:
+          type: string
+          example: '50 pounds'
+        wishlisted:
+          type: integer
+          example: 50
+    shipping:
+      required:
+        - device_id
+        - shippingPriority
+        - shippingCompany
+        - address
+        - name
+        - deliveryDate
+        - ordersreceived
+      properties:
+        device_id:
+          type: string
+          example: A1B2C3D4
+        shippingPriority:
+          type: string
+          example: 'Standard'
+        shippingCompany:
+          type: string
+          example: 'UPS'
+        address:
+          type: string
+          example: '123 example Street'
+        name:
+          type: string
+          example: 'John James'
+        deliveryDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        ordersreceived:
+          type: integer
+          example: 50

@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  description: This API provide event stats
+  version: "1.0.0"
+  title: stats API
+  contact:
+    email: ronytran@live.com
+paths:
+    /stats:
+      get:
+        summary: get event status
+        operationId: app.get_stats
+        description: Get statistics on packages/orders
+        responses:
+          '200':
+            description: Return orders sucessfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  items:
+                    $ref: '#/components/schemas/ReadingStats'
+          '400':
+            description: Invalid request
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+
+components:
+  schemas:
+    ReadingStats:
+      required:
+        - num_order_readings
+        - max_order_reading
+        - num_inv_readings
+        - max_inv_reading
+      properties:
+        num_order_readings:
+          type: integer
+          example: 50
+        max_order_reading:
+          type: integer
+          example: 36
+        num_inv_readings:
+          type: integer
+          example: 60
+        max_inv_reading:
+          type: integer
+          example: 14
+      type: object
+
+

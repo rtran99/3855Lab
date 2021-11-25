@@ -1,0 +1,9 @@
+version: 1
+eventstore1:
+  url: http://localhost:8090/inventory/searchitem
+eventstore2:
+  url: http://localhost:8090/fullfillment/shiporders
+events:
+  hostname: azureuser
+  port: 9092
+  topic: events

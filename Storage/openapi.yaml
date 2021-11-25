@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  description: This API receives the order of Packages Delivered
+  version: "1.0.0"
+  title: Simple Inventory API
+  contact:
+    email: rtran21@my.bcit.ca
+
+tags:
+  - name: scanner
+    description: records and scans the package being shipped
+paths:
+  /inventory/searchitem:
+    post:
+      tags:
+        - fullfillment
+      summary: searches inventory
+      operationId: app.search_Inventory
+      description:
+          Searches the inventory for the package
+      responses:
+        '201':
+          description: package marked
+        '400':
+          description: 'invalid input, package invalid'
+        '409':
+          description: package has been cancelled
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+        description: Inventory item to add
+    get:
+      tags:
+        - devices
+      summary: gets new readings
+      operationId: app.get_InventoryItem
+      description: Gets readings added after a timestamp
+      parameters:
+       - name: timestamp
+         in: query
+         description: Limits the number of items on a page
+         schema:
+          type: string
+          format: date-time
+          example: '2016-08-29 09:12:33.001Z'
+      responses:
+        '200':
+          description: Successfully returned a list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItem'
+                  type: object
+                  properties:
+                    device_id:
+                      type: string
+                    trackingId:
+                      type: string
+                      format: uuid
+                    Itemname:
+                      type: string
+                    manufacturer:
+                      type: string
+                    quantity:
+                      type: integer
+                    weight:
+                      type: string
+                    wishlisted:
+                      type: integer
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+               type: object
+               properties:
+                message:
+                  type: string
+
+  /fullfillment/shiporders:
+    post:
+      tags:
+        - staff
+      summary: track packages that need to be shipped and packages that are cancelled
+      operationId: app.place_Shipment
+      description: marks package for shipment
+      responses:
+        '201':
+          description: package marked
+        '400':
+          description: 'invalid input, package invalid'
+        '409':
+          description: package has been cancelled
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/shipping'
+        description: Inventory item to add
+    get:
+      tags:
+        - devices
+      summary: gets new readings
+      operationId: app.get_shipping
+      description: Gets readings added after a timestamp
+      parameters:
+       - name: timestamp
+         in: query
+         description: Limits the number of items on a page
+         schema:
+          type: string
+          format: date-time
+          example: '2016-08-29 09:12:33.001Z'
+      responses:
+        '200':
+          description: Successfully returned a list of events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/shipping'
+                type: array
+                items:
+                  type: object
+                  properties:
+                    device_id:
+                      type: string
+                      example: 'A1B2C3D4'
+                    shippingPriority:
+                      type: string
+                      example: 'Standard'
+                    shippingCompany:
+                      type: string
+                      example: 'UPS'
+                    address:
+                      type: string
+                      example: '123 example Street'
+                    name:
+                      type: string
+                      example: 'John James'
+                    deliveryDate:
+                      type: string
+                      format: date-time
+                      example: '2016-08-29T09:12:33.001Z'
+                    ordersreceived:
+                      type: integer
+                      example: 50
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+               type: object
+               properties:
+                message:
+                  type: string
+
+components:
+  schemas:
+    InventoryItem:
+      type: object
+      required:
+        - device_id
+        - trackingId
+        - Itemname
+        - manufacturer
+        - quantity
+        - weight
+        - wishlisted
+      properties:
+        device_id:
+          type: string
+          example: 'A1B2C3D4'
+        trackingId:
+          type: string
+          format: uuid
+          example: 1Z9999999999999999
+        Itemname:
+          type: string
+          example: 'Fan'
+        manufacturer:
+          type: string
+          example: 'Honeywell'
+        quantity:
+          type: integer
+          example: 10
+        weight:
+          type: string
+          example: '50 pounds'
+        wishlisted:
+          type: integer
+          example: 50
+    shipping:
+      required:
+        - device_id
+        - shippingPriority
+        - shippingCompany
+        - address
+        - name
+        - deliveryDate
+        - ordersreceived
+      properties:
+        device_id:
+          type: string
+          example: 'A1B2C3D4'
+        shippingPriority:
+          type: string
+          example: 'Standard'
+        shippingCompany:
+          type: string
+          example: 'UPS'
+        address:
+          type: string
+          example: '123 example Street'
+        name:
+          type: string
+          example: 'John James'
+        deliveryDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        ordersreceived:
+          type: integer
+          example: 50

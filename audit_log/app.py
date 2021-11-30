@@ -70,3 +70,10 @@ def get_place_Shipment(index):
         logger.error("No more messages found")
     logger.error("Could not find BP at index %d" % index)
     return { "message": "Not Found"}, 404
+    
+
+    
+app = connexion.FlaskApp(__name__, specification_dir='')
+app.add_api("openapi.yaml",strict_validation=True, validate_responses=True)
+if __name__ == "__main__":
+    app.run(port=8200)

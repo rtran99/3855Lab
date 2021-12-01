@@ -6,6 +6,7 @@ import logging
 from logging import config
 from pykafka import KafkaClient
 import json
+import datetime
 
 HEADERS = {"Content-Type": "application/json"}
 
@@ -28,7 +29,9 @@ def place_Shipment(body):
     # logger.info("Returned event %s response %s with status %s"
     #             % ("Orders received", body["device_id"], response.status_code))
     # return NoContent, response.status_code
-    client = KafkaClient(hosts='azureuser:9092')
+    hostname = "%s:%d" % (app_config["events"]["hostname"],
+                          app_config["events"]["port"])
+    client = KafkaClient(hosts=hostname)
     topic = client.topics[str.encode("events")]
     producer = topic.get_sync_producer()
     msg = {"type": "pv", "datetime": datetime.datetime.now().strftime(
@@ -52,8 +55,10 @@ def search_Inventory(body):
     # logger.info("Returned event %s response %s with status %s"
     #             % ("Item Names", body["device_id"], response.status_code))
     # return NoContent, response.status_code
+    hostname = "%s:%d" % (app_config["events"]["hostname"],
+                          app_config["events"]["port"])
+    client = KafkaClient(hosts=hostname)
 
-    client = KafkaClient(hosts='azureuser:9092')
     topic = client.topics[str.encode("events")]
     producer = topic.get_sync_producer()
 

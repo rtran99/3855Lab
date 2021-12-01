@@ -10,7 +10,6 @@ import logging
 from logging import config
 import yaml
 import requests
-import query
 import json
 from pykafka import KafkaClient
 from  pykafka.common import OffsetType
@@ -107,6 +106,7 @@ def search_Inventory(body):
     logger.info("Stored event %s request with a unique id of %s" % ("Customer items", body["device_id"]))
 
     return NoContent, 201
+
 def process_messages():
     """ Process event messages """
     hostname = "%s:%d" % (app_config["events"]["hostname"],

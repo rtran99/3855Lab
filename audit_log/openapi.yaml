@@ -11,129 +11,88 @@ tags:
     description: records and scans the package being shipped
 paths:
   /inventory/searchitem:
-    post:
+    get:
       tags:
         - fullfillment
       summary: searches inventory
       operationId: app.get_search_Inventory
       description: 
           Searches the inventory for the package
-      responses:
-        '201':
-          description: package marked
-        '400':
-          description: 'invalid input, package invalid'
-        '409':
-          description: package has been cancelled
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InventoryItem'
-        description: Inventory item to add
-
+      parameters:
+        - name: index
+          in: query
+          description: Gets the inventory at the index in the event store
+          schema:
+            type: integer
+            example: 100
+      responses: 
+        '200': 
+          description: Successfully returned a blood pressure event 
+          content: 
+            application/json: 
+              schema: 
+                type: object 
+                items: 
+                  $ref: '#/components/schemas/InventoryItem' 
+        '400': 
+          description: Invalid request 
+          content: 
+            application/json: 
+              schema: 
+                type: object 
+                properties: 
+                  message: 
+                    type: string 
+        '404': 
+          description: Not Found 
+          content: 
+            application/json: 
+              schema: 
+                type: object 
+                properties: 
+                  message: 
+                    type: string
   /fullfillment/shiporders:
-    post:
+    get:
       tags:
         - staff
       summary: track packages that need to be shipped and packages that are cancelled
       operationId: app.get_place_Shipment
       description: marks package for shipment
-      responses:
-        '201':
-          description: package marked
-        '400':
-          description: 'invalid input, package invalid'
-        '409':
-          description: package has been cancelled
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/shipping'
-        description: Inventory item to add
-
-
-paths:
-  /event1:
-    get:
-      summary: gets a blood pressure reading from history
-      operationId: app.get_motion
-      description: Gets blood pressure readings from the event store
       parameters:
         - name: index
           in: query
-          description: Gets the BP at the index in the event store
+          description: Gets the shipment at the index in the event storage
           schema:
             type: integer
             example: 100
-      responses:
-        '200':
-          description: Successfully returned a blood pressure event
-          content:
-            application/json:
-              schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/InventoryItem'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-             schema:
-              type: object
-              properties:
-                message:
-                  type: string
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-  /event2:
-    get:
-      summary: gets a heart rate reading from history
-      operationId: app.get_door_motion
-      description: Gets heart rate reading from the event store
-      parameters:
-        - name: index
-          in: query
-          description: Gets the HR at the index in the event store
-          schema:
-            type: integer
-            example: 100
-      responses:
-        '200':
-          description: Successfully returned a heart rate event
-          content:
-            application/json:
-              schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/shipping'
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-        '404':
-          description: Not Found
-
-
-
-
-
-
-
-        
+      responses: 
+        '200': 
+          description: Successfully returned a blood pressure event 
+          content: 
+            application/json: 
+              schema: 
+                type: object 
+                items: 
+                  $ref: '#/components/schemas/shipping' 
+        '400': 
+          description: Invalid request 
+          content: 
+            application/json: 
+              schema: 
+                type: object 
+                properties: 
+                  message: 
+                    type: string 
+        '404': 
+          description: Not Found 
+          content: 
+            application/json: 
+              schema: 
+                type: object 
+                properties: 
+                  message: 
+                    type: string       
 components:
   schemas:
     InventoryItem:

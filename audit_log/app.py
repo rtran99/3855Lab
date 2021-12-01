@@ -1,13 +1,10 @@
 import connexion
 from connexion import NoContent
 import datetime
-from search_Inventory import SearchInventory
-from place_Shipment import PlaceShipment
 import logging
 from logging import config
 import yaml
 import requests
-import query
 import json
 from pykafka import KafkaClient
 from  pykafka.common import OffsetType
@@ -16,7 +13,6 @@ logger = logging.getLogger('basicLogger')
 
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
-    data_file = app_config["datastore"]["filename"]
 
 with open('log_conf.yml', 'r') as f:
     log_config = yaml.safe_load(f.read())
@@ -76,4 +72,4 @@ def get_place_Shipment(index):
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yaml",strict_validation=True, validate_responses=True)
 if __name__ == "__main__":
-    app.run(port=8200)
+    app.run(port=8110)

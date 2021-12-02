@@ -18,7 +18,7 @@ from threading import Thread
 
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
-    
+
 with open('log_conf.yml', 'r') as f:
     log_config = yaml.safe_load(f.read())
     logging.config.dictConfig(log_config)
@@ -125,14 +125,38 @@ def process_messages():
         msg = json.loads(msg_str)
         logger.info("Message: %s" % msg)
         payload = msg["payload"]
-        if msg["type"] == "pv":  # Change this to your event type
+        if msg["type"] == "shipping":  # Change this to your event type
             # Store the event1 (i.e., the payload) to the DB
-            pass
-        elif msg["type"] == "wt":  # Change this to your event type
+                session = DB_SESSION()
+                ad = PlaceShipment(
+                    payload['device_id'],
+                    payload['shippingPriority'],
+                    payload['shippingCompany'],
+                    payload['address'],
+                    payload['name'],
+                    payload['deliveryDate'],
+                    payload['ordersreceived']
+    	        )
+    	        session.add(ad)
+                session.commit()
+    	        session.close()
+      elif msg["type"] == "InventoryItem":  # Change this to your event type
             # Store the event2 (i.e., the payload) to the DB
-            pass
+    	        session = DB_SESSION()
+    	        at = SearchInventory(
+                    payload['device_id'],
+                    payload['trackingId'],
+                    payload['Itemname'],
+                    payload['manufacturer'],
+                    payload['quantity'],
+                    payload['weight'],
+                    payload['wishlisted']
+    	         )
+    	        session.add(at)
+    	        session.commit()
+    	        session.close()
         # Commit the new message as being read
-        consumer.commit_offsets()
+      consumer.commit_offsets()
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yaml", strict_validation=True, validate_responses=True)

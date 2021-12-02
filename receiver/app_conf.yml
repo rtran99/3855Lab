@@ -1,8 +1,8 @@
 version: 1
 eventstore1:
-  url: http://localhost:8090/inventory/searchitem
+  url: http://lab3855api.westus.cloudapp.azure.com/inventory/searchitem
 eventstore2:
-  url: http://localhost:8090/fullfillment/shiporders
+  url: http://lab3855api.westus.cloudapp.azure.com/fullfillment/shiporders
 events:
   hostname: lab3855api.westus.cloudapp.azure.com
   port: 9092

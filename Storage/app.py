@@ -128,30 +128,26 @@ def process_messages():
         if msg["type"] == "shipping":  # Change this to your event type
             # Store the event1 (i.e., the payload) to the DB
             session = DB_SESSION()
-            ad = PlaceShipment(
-                payload['device_id'],
-                payload['shippingPriority'],
-                payload['shippingCompany'],
-                payload['address'],
-                payload['name'],
-                payload['deliveryDate'],
-                payload['ordersreceived']
-    	    )
+            ad = PlaceShipment(payload['device_id'],
+                    payload['shippingPriority'],
+                    payload['shippingCompany'],
+                    payload['address'],
+                    payload['name'],
+                    payload['deliveryDate'],
+                    payload['ordersreceived'])
     	    session.add(ad)
             session.commit()
     	    session.close()
         elif msg["type"] == "InventoryItem":  # Change this to your event type
             # Store the event2 (i.e., the payload) to the DB
     	    session = DB_SESSION()
-    	    at = SearchInventory(
-                payload['device_id'],
-                payload['trackingId'],
-                payload['Itemname'],
-                payload['manufacturer'],
-                payload['quantity'],
-                payload['weight'],
-                payload['wishlisted']
-    	        )
+    	    at = SearchInventory(payload['device_id'],
+                    payload['trackingId'],
+                    payload['Itemname'],
+                    payload['manufacturer'],
+                    payload['quantity'],
+                    payload['weight'],
+                    payload['wishlisted'])
     	    session.add(at)
     	    session.commit()
     	    session.close()

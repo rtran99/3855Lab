@@ -12,7 +12,7 @@ import yaml
 import requests
 import json
 from pykafka import KafkaClient
-from  pykafka.common import OffsetType
+from pykafka.common import OffsetType
 from threading import Thread
 
 
@@ -24,37 +24,44 @@ with open('log_conf.yml', 'r') as f:
     logging.config.dictConfig(log_config)
 logger = logging.getLogger("basicLogger")
 
-DB_ENGINE = create_engine(f'mysql+pymysql://{app_config["datastore"]["user"]}:{app_config["datastore"]["password"]}@{app_config["datastore"]["hostname"]}:{app_config["datastore"]["port"]}/{app_config["datastore"]["db"]}')
+DB_ENGINE = create_engine(
+    f'mysql+pymysql://{app_config["datastore"]["user"]}:{app_config["datastore"]["password"]}@{app_config["datastore"]["hostname"]}:{app_config["datastore"]["port"]}/{app_config["datastore"]["db"]}')
 print(DB_ENGINE)
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
-logger.info(("Connecting to DB. Hostname {}, Port: {}").format(app_config['datastore']["hostname"],app_config['datastore']["port"]))
-
-
+logger.info(("Connecting to DB. Hostname {}, Port: {}").format(
+    app_config['datastore']["hostname"], app_config['datastore']["port"]))
 
 
 def get_shipping(timestamp):
     session = DB_SESSION()
-    timestamp_datetime = datetime.datetime.strptime(timestamp,"%Y-%m-%dT%H:%M:%SZ")
-    readings = session.query(SearchInventory).filter(SearchInventory.date_created > timestamp_datetime)
+    timestamp_datetime = datetime.datetime.strptime(
+        timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    readings = session.query(SearchInventory).filter(
+        SearchInventory.date_created > timestamp_datetime)
     results_list = []
     for reading in readings:
         results_list.append(reading.to_dict())
     session.close()
-    logger.info("Query for order readings after %s returns %d results" % (timestamp, len(results_list)))
+    logger.info("Query for order readings after %s returns %d results" %
+                (timestamp, len(results_list)))
     return results_list, 200
+
 
 def get_InventoryItem(timestamp):
     session = DB_SESSION()
-    timestamp_datetime = datetime.datetime.strptime(timestamp,"%Y-%m-%dT%H:%M:%SZ")
-    readings = session.query(PlaceShipment).filter(PlaceShipment.date_created > timestamp_datetime)
+    timestamp_datetime = datetime.datetime.strptime(
+        timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    readings = session.query(PlaceShipment).filter(
+        PlaceShipment.date_created > timestamp_datetime)
     results_list = []
     for reading in readings:
         results_list.append(reading.to_dict())
     session.close()
-    logger.info("Query for inventory items readings after %s returns %d results" % (timestamp, len(results_list)))
+    logger.info("Query for inventory items readings after %s returns %d results" % (
+        timestamp, len(results_list)))
     return results_list, 200
 
 
@@ -78,7 +85,8 @@ def place_Shipment(body):
     session.commit()
     session.close()
 
-    logger.info("Stored event %s request with a unique id of %s" % ("Orders Received", body["device_id"]))
+    logger.info("Stored event %s request with a unique id of %s" %
+                ("Orders Received", body["device_id"]))
 
     return NoContent, 201
 
@@ -97,15 +105,16 @@ def search_Inventory(body):
         body['wishlisted']
     )
 
-
     session.add(at)
 
     session.commit()
     session.close()
 
-    logger.info("Stored event %s request with a unique id of %s" % ("Customer items", body["device_id"]))
+    logger.info("Stored event %s request with a unique id of %s" %
+                ("Customer items", body["device_id"]))
 
     return NoContent, 201
+
 
 def process_messages():
     """ Process event messages """
@@ -129,30 +138,31 @@ def process_messages():
             # Store the event1 (i.e., the payload) to the DB
             session = DB_SESSION()
             ad = PlaceShipment(payload['device_id'],
-                    payload['shippingPriority'],
-                    payload['shippingCompany'],
-                    payload['address'],
-                    payload['name'],
-                    payload['deliveryDate'],
-                    payload['ordersreceived'])
-    	    session.add(ad)
+                               payload['shippingPriority'],
+                               payload['shippingCompany'],
+                               payload['address'],
+                               payload['name'],
+                               payload['deliveryDate'],
+                               payload['ordersreceived'])
+            session.add(ad)
             session.commit()
-    	    session.close()
+            session.close()
         elif msg["type"] == "InventoryItem":  # Change this to your event type
             # Store the event2 (i.e., the payload) to the DB
-    	    session = DB_SESSION()
-    	    at = SearchInventory(payload['device_id'],
-                    payload['trackingId'],
-                    payload['Itemname'],
-                    payload['manufacturer'],
-                    payload['quantity'],
-                    payload['weight'],
-                    payload['wishlisted'])
-    	    session.add(at)
-    	    session.commit()
-    	    session.close()
+            session = DB_SESSION()
+            at = SearchInventory(payload['device_id'],
+                                 payload['trackingId'],
+                                 payload['Itemname'],
+                                 payload['manufacturer'],
+                                 payload['quantity'],
+                                 payload['weight'],
+                                 payload['wishlisted'])
+            session.add(at)
+            session.commit()
+            session.close()
         # Commit the new message as being read
         consumer.commit_offsets()
+
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yaml", strict_validation=True, validate_responses=True)

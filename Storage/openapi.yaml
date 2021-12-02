@@ -194,7 +194,6 @@ components:
           type: integer
           example: 50
     shipping:
-      type: object
       required:
         - device_id
         - shippingPriority

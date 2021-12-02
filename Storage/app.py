@@ -140,7 +140,7 @@ def process_messages():
     	        session.add(ad)
                 session.commit()
     	        session.close()
-      elif msg["type"] == "InventoryItem":  # Change this to your event type
+        elif msg["type"] == "InventoryItem":  # Change this to your event type
             # Store the event2 (i.e., the payload) to the DB
     	        session = DB_SESSION()
     	        at = SearchInventory(
@@ -156,7 +156,7 @@ def process_messages():
     	        session.commit()
     	        session.close()
         # Commit the new message as being read
-      consumer.commit_offsets()
+        consumer.commit_offsets()
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yaml", strict_validation=True, validate_responses=True)

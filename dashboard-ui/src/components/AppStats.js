@@ -8,7 +8,7 @@ export default function AppStats() {
 
 	const getStats = () => {
 	
-        fetch(`http://<Cloud DNS>:8100/stats`)
+        fetch(`http://lab3855api.westus.cloudapp.azure.com:8100/stats`)
             .then(res => res.json())
             .then((result)=>{
 				console.log("Received Stats")

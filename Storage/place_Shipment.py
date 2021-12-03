@@ -33,7 +33,7 @@ class PlaceShipment(Base):
         dict['address'] = self.address
         dict['name'] = self.name
         dict['deliveryDate'] = self.deliveryDate
-        dict['ordersreceived'] = {}
+        dict['ordersreceived'] = self.ordersreceived
         dict['date_created'] = self.date_created
 
         return dict

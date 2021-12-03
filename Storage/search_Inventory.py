@@ -35,7 +35,7 @@ class SearchInventory(Base):
         dict['trackingId'] = self.trackingId
         dict['Itemname'] = self.Itemname
         dict['manufacturer'] = self.manufacturer
-        dict['quantity'] = {}
+        dict['quantity'] = self.quantity
         dict['weight'] = self.weight
         dict['wishlisted'] = self.wishlisted
         dict['date_created'] = self.date_created

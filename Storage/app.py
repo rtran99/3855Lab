@@ -39,14 +39,15 @@ def get_shipping(timestamp):
     session = DB_SESSION()
     timestamp_datetime = datetime.datetime.strptime(
         timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    readings = session.query(SearchInventory).filter(
-        SearchInventory.date_created > timestamp_datetime)
+    readings = session.query(PlaceShipment).filter(
+        PlaceShipment.date_created > timestamp_datetime)
     results_list = []
     for reading in readings:
         results_list.append(reading.to_dict())
     session.close()
     logger.info("Query for order readings after %s returns %d results" %
                 (timestamp, len(results_list)))
+    logger.info(results_list)
     return results_list, 200
 
 
@@ -54,14 +55,15 @@ def get_InventoryItem(timestamp):
     session = DB_SESSION()
     timestamp_datetime = datetime.datetime.strptime(
         timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    readings = session.query(PlaceShipment).filter(
-        PlaceShipment.date_created > timestamp_datetime)
+    readings = session.query(SearchInventory).filter(
+        SearchInventory.date_created > timestamp_datetime)
     results_list = []
     for reading in readings:
         results_list.append(reading.to_dict())
     session.close()
     logger.info("Query for inventory items readings after %s returns %d results" % (
         timestamp, len(results_list)))
+    logger.info(results_list)
     return results_list, 200
 
 

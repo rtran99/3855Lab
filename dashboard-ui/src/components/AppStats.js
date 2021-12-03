@@ -35,21 +35,18 @@ export default function AppStats() {
                 <table className={"StatsTable"}>
 					<tbody>
 						<tr>
-							<th>Blood Pressure</th>
-							<th>Heart Rate</th>
+							<th>Inventory Item</th>
+							<th>Orders</th>
 						</tr>
 						<tr>
-							<td># BP: {stats['num_inv_readings']}</td>
-							<td># HR: {stats['num_order_readings']}</td>
+							<td># IV: {stats['num_inv_readings']}</td>
+							<td># OR: {stats['num_order_readings']}</td>
 						</tr>
 						<tr>
-							<td colspan="2">Max BP Systolic: {stats['max_inv_reading']}</td>
+							<td colspan="2">Max INV: {stats['max_inv_reading']}</td>
 						</tr>
 						<tr>
-							<td colspan="2">Max BR Diastolic: {stats['max_bp_dia_reading']}</td>
-						</tr>
-						<tr>
-							<td colspan="2">Max HR: {stats['max_order_reading']}</td>
+							<td colspan="2">Max OR: {stats['max_order_reading']}</td>
 						</tr>
 					</tbody>
                 </table>

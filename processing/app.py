@@ -41,8 +41,6 @@ def populate_stats():
 
     response_search_item = requests.get(app_config["searchitem"]["url"], params={'timestamp': last_update})
     response_shipping = requests.get(app_config["shiporders"]["url"], params={'timestamp': last_update})
-    print(type(response_search_item.json()))
-    print(type(response_shipping.json()))
     if len(response_search_item.json()) != 0 and len(response_shipping.json()) != 0:
         temp_list = []
         for tmd in response_search_item.json():

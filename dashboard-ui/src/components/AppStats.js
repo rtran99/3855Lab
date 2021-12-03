@@ -39,17 +39,17 @@ export default function AppStats() {
 							<th>Heart Rate</th>
 						</tr>
 						<tr>
-							<td># BP: {stats['num_bp_readings']}</td>
-							<td># HR: {stats['num_hr_readings']}</td>
+							<td># BP: {stats['num_inv_readings']}</td>
+							<td># HR: {stats['num_order_readings']}</td>
 						</tr>
 						<tr>
-							<td colspan="2">Max BP Systolic: {stats['max_bp_sys_reading']}</td>
+							<td colspan="2">Max BP Systolic: {stats['max_inv_reading']}</td>
 						</tr>
 						<tr>
 							<td colspan="2">Max BR Diastolic: {stats['max_bp_dia_reading']}</td>
 						</tr>
 						<tr>
-							<td colspan="2">Max HR: {stats['max_bp_sys_reading']}</td>
+							<td colspan="2">Max HR: {stats['max_order_reading']}</td>
 						</tr>
 					</tbody>
                 </table>
